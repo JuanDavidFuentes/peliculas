@@ -12,6 +12,7 @@ class Server {
     this.middlewares();
     this.port = process.env.PORT; //process accede al archivo .env
     this.connectarbd()
+    this.routes()
   }
 
   middlewares() {
