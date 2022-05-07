@@ -2,6 +2,7 @@
 import express from "express";
 import cors from "cors";
 import { dbConnection } from "../database/config.js";
+import persona from "../routes/persona.js"
 
 
 
@@ -21,6 +22,10 @@ class Server {
 
   async connectarbd(){
     await dbConnection ()
+  }
+
+  routes(){
+    this.app.use("/api/persona",persona)
   }
 
   listen() {

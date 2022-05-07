@@ -1,4 +1,8 @@
-app.post("/", (req, res) => {
+import {Router} from "express";
+
+const router=Router();
+
+router.post("/", (req, res) => {
     let { nombre, edad, apellidos, email, paswords, telefono } = req.body;
   
     res.json({
@@ -12,13 +16,13 @@ app.post("/", (req, res) => {
     personas.push(req.body);
   });
   
-  app.get("/", (req, res) => {
+  router.get("/", (req, res) => {
     res.json({
       personas,
     });
   });
   
-  app.get("/buscar", (req, res) => {
+  router.get("/buscar", (req, res) => {
     let { email } = req.query;
     let persona = personas.find((c) => c.email === email);
     res.json({
@@ -26,7 +30,7 @@ app.post("/", (req, res) => {
     });
   });
   
-  app.get("/login", (req, res) => {
+  router.get("/login", (req, res) => {
     let { email, paswords } = req.query;
     let a = personas.find((c) => c.email === email && c.paswords === paswords);
     
@@ -41,10 +45,12 @@ app.post("/", (req, res) => {
     }
   });
   
-  app.delete("/", (req, res) => {
+  router.delete("/", (req, res) => {
     let { email } = req.query;
     personas = personas.filter((c) => c.email !== email);
     res.json({
       "msg": `La persona con el correo ${email} se a eliminado`,
     });
   });
+
+  export default router;
