@@ -1,8 +1,11 @@
 import Persona from "../models/persona.js"
+import bcryptjs from "bcryptjs"
 
 const personaPost=async(req, res)=>{
     const {nombre,apellido,edad,telefono,email,password} = req.body
+    let salt=bcryptjs.genSaltSync(10)
     const persona=new Persona({nombre,apellido,edad,telefono,email,password})
+    persona.password=bcryptjs.hashSync(password,salt)
     await persona.save()
 
     res.json({
@@ -25,9 +28,11 @@ const personaGetBuscar=async(req, res)=>{
 }
 
 const personaGetlogin=async(req, res)=>{
-    const {email,password}= req.query 
+    let {email,password}= req.query 
+    const persona= await Persona.findOne({email})
+    const validarPassword=bcryptjs.compareSync(password,persona.password)
     const personas= await Persona.find({email,password})
-    if (personas.length>0)
+    if (validarPassword)
         res.json({
             "msg":"bienvenido"
         })
@@ -36,6 +41,11 @@ const personaGetlogin=async(req, res)=>{
             "msg":"Usted que hace aqui"
         })
 }
+
+
+
+
+
 const personaDelete=async(req, res)=>{
     const{email}=req.query
     const persona= await Persona.findOneAndDelete({email})
